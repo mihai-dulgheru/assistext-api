@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Lesson {
+  id       String    @id @default(uuid())
+  title    String
+  sections Section[]
+}
+
+model Section {
+  id       String @id @default(uuid())
+  lessonId String
+  subtitle String
+  content  String
+  lesson   Lesson @relation(fields: [lessonId], references: [id])
+}

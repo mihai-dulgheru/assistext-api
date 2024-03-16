@@ -21,6 +21,7 @@
     "build": "npm-run-all clean transpile",
     "clean": "rimraf dist",
     "dev": "set DEBUG=assistext-api:* & set NODE_ENV=development & npm-run-all build server",
+    "prisma:seed": "node prisma/seed.js",
     "prod": "NODE_ENV=production npm-run-all build server",
     "server": "node ./dist/bin/www",
     "start": "npm run prod",
@@ -32,6 +33,7 @@
     "@babel/cli": "^7.23.9",
     "@babel/core": "^7.24.0",
     "@babel/preset-env": "^7.24.0",
+    "@prisma/client": "^5.11.0",
     "axios": "^1.6.8",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -40,6 +42,7 @@
     "morgan": "~1.9.1",
     "nodemon": "^3.1.0",
     "npm-run-all": "^4.1.5",
+    "prisma": "^5.11.0",
     "rimraf": "^5.0.5"
   },
   "babel": {

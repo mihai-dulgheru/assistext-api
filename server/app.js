@@ -7,7 +7,6 @@ import { join } from 'path';
 import completionsRouter from './routes/completions';
 import indexRouter from './routes/index';
 import lessonsRouter from './routes/lessons';
-import usersRouter from './routes/users';
 
 const app = express();
 
@@ -20,6 +19,5 @@ app.use(express.static(join(__dirname, '../public')));
 app.use('/', indexRouter);
 app.use('/completions', completionsRouter);
 app.use('/lessons', lessonsRouter);
-app.use('/users', usersRouter);
 
 export default app;

@@ -1,0 +1,140 @@
+{
+	"info": {
+		"_postman_id": "ac1e2285-9adf-44e3-b0ef-f6f02725322a",
+		"name": "assistext-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "18120273"
+	},
+	"item": [
+		{
+			"name": "Lessons",
+			"item": [
+				{
+					"name": "Find Many",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonData = pm.response.json();\r",
+									"pm.collectionVariables.set(\"lesson_id\", jsonData?.[0]?.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/lessons",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"lessons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find Unique",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/lessons/{{lesson_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"lessons",
+								"{{lesson_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"Lorem ipsum dolor sit amet, consectetur adipiscing elit.\",\r\n    \"sections\": [\r\n        {\r\n            \"subtitle\": \"Praesent nisi lorem, sodales ac felis ac, rhoncus lacinia felis.\",\r\n            \"content\": \"Proin finibus condimentum mi, ut blandit mauris pharetra mollis. Morbi quis luctus tellus. Nullam diam velit, aliquet ,non facilisis vel, bibendum eget turpis. Duis mattis rhoncus hendrerit. Vestibulum non odio elit.\"\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/lessons",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"lessons"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/lessons/{{lesson_id}}",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"lessons",
+								"{{lesson_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:5000",
+			"type": "string"
+		},
+		{
+			"key": "lesson_id",
+			"value": ""
+		}
+	]
+}
