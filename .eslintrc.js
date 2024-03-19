@@ -20,5 +20,5 @@ module.exports = {
     sourceType: 'module',
   },
   rules: {},
-  ignorePatterns: ['**/__tests__/**'],
+  ignorePatterns: ['**/tests/**'],
 };
