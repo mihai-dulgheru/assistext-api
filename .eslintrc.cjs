@@ -19,6 +19,9 @@ module.exports = {
     ecmaVersion: 'latest',
     sourceType: 'module',
   },
-  rules: {},
+  rules: {
+    'no-console': ['error', { allow: ['error', 'warn'] }],
+    'no-unused-vars': ['error', { ignoreRestSiblings: true }],
+  },
   ignorePatterns: ['**/tests/**'],
 };
