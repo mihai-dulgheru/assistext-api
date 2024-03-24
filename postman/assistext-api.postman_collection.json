@@ -1,11 +1,42 @@
 {
 	"info": {
-		"_postman_id": "ac1e2285-9adf-44e3-b0ef-f6f02725322a",
+		"_postman_id": "d5afabf2-ac8d-48a1-bf6b-aff68c9dd065",
 		"name": "assistext-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "18120273"
 	},
 	"item": [
+		{
+			"name": "Completions",
+			"item": [
+				{
+					"name": "Generate a text completion",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"prompt\": \"Introducere în curs\",\r\n    \"maxTokens\": 16,\r\n    \"temperature\": 0\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/completions",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"completions"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
 		{
 			"name": "Lessons",
 			"item": [

@@ -1,51 +1,24 @@
-// import axios from 'axios';
 import { Router } from 'express';
+import { OpenAI } from 'openai';
+
 const router = Router();
 
 router.post('/', async function (req, res) {
-  // Mock response
-  res.json({
-    id: 'cmpl-93AWrOqYgUFttse0oqAeiXHBk54He',
-    object: 'text_completion',
-    created: 1710542485,
-    model: 'gpt-3.5-turbo-instruct',
-    choices: [
-      {
-        text: ' 180°\n\nAceasta este o',
-        index: 0,
-        logprobs: null,
-        finish_reason: 'length',
-      },
-    ],
-    usage: {
-      prompt_tokens: 13,
-      completion_tokens: 8,
-      total_tokens: 21,
-    },
-  });
+  try {
+    const openai = new OpenAI(process.env.OPENAI_API_KEY);
 
-  // try {
-  //   const response = await axios.post(
-  //     'https://api.openai.com/v1/completions',
-  //     {
-  //       model: 'gpt-3.5-turbo-instruct',
-  //       prompt: req.body.prompt,
-  //       max_tokens: req.body.maxTokens,
-  //       temperature: req.body.temperature,
-  //     },
-  //     {
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         Authorization: `Bearer ${process.env.OPENAI_API_KEY}`,
-  //       },
-  //     }
-  //   );
+    const completion = await openai.completions.create({
+      model: process.env.OPENAI_MODEL,
+      prompt: req.body.prompt,
+      max_tokens: req.body.maxTokens || 16,
+      temperature: req.body.temperature || 0,
+    });
 
-  //   res.json(response.data);
-  // } catch (error) {
-  //   console.log(error.toJSON());
-  //   res.status(500).json({ name: error.name, message: error.message });
-  // }
+    res.json(completion);
+  } catch (error) {
+    console.error(error.toJSON());
+    res.status(500).json({ name: error.name, message: error.message });
+  }
 });
 
 export default router;
