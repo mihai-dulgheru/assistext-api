@@ -1,23 +1,27 @@
-/* eslint-disable no-console */
-const { PrismaClient } = require('@prisma/client');
+import { PrismaClient } from '@prisma/client';
+import { readFileSync } from 'fs';
+
 const prisma = new PrismaClient();
 
 async function main() {
-  const lesson1 = await prisma.lesson.create({
-    data: {
-      title: 'Lecția 1',
-      sections: {
-        create: [
-          {
-            subtitle: 'Introducere în curs',
-            content: 'Acesta este conținutul lecției 1.',
-          },
-        ],
-      },
-    },
-  });
+  await prisma.section.deleteMany();
+  await prisma.lesson.deleteMany();
 
-  console.log(`Lecția creată: ${lesson1.title}`);
+  const data = JSON.parse(readFileSync('data/copywriting_lessons.json'));
+
+  for (const lesson of data) {
+    await prisma.lesson.create({
+      data: {
+        title: lesson.title,
+        sections: {
+          create: lesson.sections.map((section) => ({
+            subtitle: section.subtitle,
+            content: section.content,
+          })),
+        },
+      },
+    });
+  }
 }
 
 main()

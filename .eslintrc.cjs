@@ -23,5 +23,5 @@ module.exports = {
     'no-console': ['error', { allow: ['error', 'warn'] }],
     'no-unused-vars': ['error', { ignoreRestSiblings: true }],
   },
-  ignorePatterns: ['**/tests/**'],
+  ignorePatterns: ['**/__tests__/**'],
 };

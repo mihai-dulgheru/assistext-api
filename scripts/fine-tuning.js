@@ -27,7 +27,8 @@ async function startFineTuning(fileId) {
   try {
     const fineTuneResponse = await openai.fineTuning.jobs.create({
       training_file: fileId,
-      model: 'babbage-002',
+      model: 'davinci-002',
+      suffix: 'lessons',
     });
     console.log(`Fine-tuning job started with ID: ${fineTuneResponse.id}`);
     return fineTuneResponse.id;

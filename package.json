@@ -5,7 +5,7 @@
   "scripts": {
     "build": "babel . -d dist",
     "dev": "SET DEBUG=assistext-api:* & nodemon --exec babel-node --presets=@babel/preset-env -- ./bin/www.js",
-    "prisma:seed": "node prisma/seed.js",
+    "prisma:seed": "babel-node prisma/seed.js",
     "start": "SET DEBUG=assistext-api:* & node ./dist/bin/www.js",
     "test": "jest"
   },

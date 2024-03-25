@@ -4,29 +4,85 @@ import path from 'path';
 
 const prisma = new PrismaClient();
 
+function splitIntoSentences(text) {
+  const sentences = text.match(/[\s]*[^.!?]+[.!?]+[\s]*/g) || [];
+  return sentences.map((sentence) => sentence.trim());
+}
+
+function preprocessText(text) {
+  return text.replace(/\s+/g, ' ').trim();
+}
+
 async function extractDataForFineTuning() {
   const lessons = await prisma.lesson.findMany({
-    include: {
-      sections: true,
+    select: {
+      sections: {
+        select: {
+          content: true,
+        },
+      },
     },
   });
 
-  const dataForFineTuning = lessons
-    .map((lesson) => {
-      return lesson.sections.map((section) => ({
-        prompt: section.subtitle,
-        completion: section.content.trim(),
-      }));
-    })
-    .flat();
+  const uniqueDataForFineTuning = new Map();
 
+  lessons.forEach((lesson) => {
+    lesson.sections.forEach((section) => {
+      const sentences = splitIntoSentences(section.content).map(preprocessText);
+      sentences.forEach((sentence, sentenceIndex) => {
+        const words = sentence.split(' ');
+
+        for (
+          let windowSize = 3;
+          windowSize <= Math.min(10, words.length / 2);
+          windowSize++
+        ) {
+          for (
+            let startIndex = 0;
+            startIndex <= words.length - windowSize * 2;
+            startIndex++
+          ) {
+            const prompt = words
+              .slice(startIndex, startIndex + windowSize)
+              .join(' ');
+            const completion = words
+              .slice(startIndex + windowSize, startIndex + windowSize * 2)
+              .join(' ');
+
+            if (prompt.length > 20 && completion.length > 20) {
+              const key = `${prompt}|${completion}`;
+              if (!uniqueDataForFineTuning.has(key)) {
+                uniqueDataForFineTuning.set(key, { prompt, completion });
+              }
+            }
+          }
+        }
+
+        if (sentenceIndex < sentences.length - 1) {
+          const nextSentence = sentences[sentenceIndex + 1];
+          const key = `${sentence}|${nextSentence}`;
+          if (
+            sentence.length > 20 &&
+            nextSentence.length > 20 &&
+            !uniqueDataForFineTuning.has(key)
+          ) {
+            uniqueDataForFineTuning.set(key, {
+              prompt: sentence,
+              completion: nextSentence,
+            });
+          }
+        }
+      });
+    });
+  });
+
+  const filePath = path.join(__dirname, '../temp/training_data.jsonl');
   fs.writeFileSync(
-    path.join(__dirname, '../temp/training_data.jsonl'),
-    dataForFineTuning.map((line) => JSON.stringify(line)).join('\n')
+    filePath,
+    Array.from(uniqueDataForFineTuning.values())
+      .map((line) => JSON.stringify(line))
+      .join('\n')
   );
-
-  // eslint-disable-next-line no-console
-  console.log('Data for fine-tuning prepared.');
 }
 
 export default extractDataForFineTuning;

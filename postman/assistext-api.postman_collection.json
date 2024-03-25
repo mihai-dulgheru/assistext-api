@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "d5afabf2-ac8d-48a1-bf6b-aff68c9dd065",
+		"_postman_id": "5cde4d64-6d3b-49a1-9868-c2b809fc0993",
 		"name": "assistext-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "18120273"
@@ -133,6 +133,184 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Fine-tuning",
+			"item": [
+				{
+					"name": "List fine-tuning jobs",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.openai.com/v1/fine_tuning/jobs?limit=20",
+							"protocol": "https",
+							"host": [
+								"api",
+								"openai",
+								"com"
+							],
+							"path": [
+								"v1",
+								"fine_tuning",
+								"jobs"
+							],
+							"query": [
+								{
+									"key": "after",
+									"value": null,
+									"description": "Identifier for the last job from the previous pagination request.",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "20",
+									"description": "Number of fine-tuning jobs to retrieve."
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "List fine-tuning events",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.openai.com/v1/fine_tuning/jobs/{{fine_tuning_job_id}}/events?limit=20",
+							"protocol": "https",
+							"host": [
+								"api",
+								"openai",
+								"com"
+							],
+							"path": [
+								"v1",
+								"fine_tuning",
+								"jobs",
+								"{{fine_tuning_job_id}}",
+								"events"
+							],
+							"query": [
+								{
+									"key": "after",
+									"value": null,
+									"description": "Identifier for the last event from the previous pagination request.",
+									"disabled": true
+								},
+								{
+									"key": "limit",
+									"value": "20",
+									"description": "Number of events to retrieve."
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Retrieve fine-tuning job",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://api.openai.com/v1/fine_tuning/jobs/{{fine_tuning_job_id}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"openai",
+								"com"
+							],
+							"path": [
+								"v1",
+								"fine_tuning",
+								"jobs",
+								"{{fine_tuning_job_id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cancel fine-tuning",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "https://api.openai.com/v1/fine_tuning/jobs/{{fine_tuning_job_id}}/cancel",
+							"protocol": "https",
+							"host": [
+								"api",
+								"openai",
+								"com"
+							],
+							"path": [
+								"v1",
+								"fine_tuning",
+								"jobs",
+								"{{fine_tuning_job_id}}",
+								"cancel"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete a fine-tuned model",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://api.openai.com/v1/models/{{model}}",
+							"protocol": "https",
+							"host": [
+								"api",
+								"openai",
+								"com"
+							],
+							"path": [
+								"v1",
+								"models",
+								"{{model}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "{{api_key}}",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
 		}
 	],
 	"event": [
@@ -159,13 +337,26 @@
 	],
 	"variable": [
 		{
-			"key": "url",
-			"value": "http://localhost:5000",
+			"key": "api_key",
+			"value": "",
 			"type": "string"
+		},
+		{
+			"key": "fine_tuning_job_id",
+			"value": ""
 		},
 		{
 			"key": "lesson_id",
 			"value": ""
+		},
+		{
+			"key": "model",
+			"value": ""
+		},
+		{
+			"key": "url",
+			"value": "http://localhost:5000",
+			"type": "string"
 		}
 	]
 }
