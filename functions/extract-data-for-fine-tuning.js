@@ -2,6 +2,10 @@ import { PrismaClient } from '@prisma/client';
 import fs from 'fs';
 import path from 'path';
 
+const MIN_PROMPT_LENGTH = 3;
+const MAX_PROMPT_LENGTH = 20;
+const COMPLETION_LENGTH = 3;
+
 const prisma = new PrismaClient();
 
 function splitIntoSentences(text) {
@@ -33,42 +37,46 @@ async function extractDataForFineTuning() {
         const words = sentence.split(' ');
 
         for (
-          let windowSize = 3;
-          windowSize <= Math.min(10, words.length / 2);
+          let windowSize = MIN_PROMPT_LENGTH;
+          windowSize <=
+          Math.min(MAX_PROMPT_LENGTH, words.length - COMPLETION_LENGTH);
           windowSize++
         ) {
           for (
             let startIndex = 0;
-            startIndex <= words.length - windowSize * 2;
+            startIndex <= words.length - windowSize - COMPLETION_LENGTH;
             startIndex++
           ) {
             const prompt = words
               .slice(startIndex, startIndex + windowSize)
               .join(' ');
             const completion = words
-              .slice(startIndex + windowSize, startIndex + windowSize * 2)
+              .slice(
+                startIndex + windowSize,
+                startIndex + windowSize + COMPLETION_LENGTH
+              )
               .join(' ');
 
-            if (prompt.length > 20 && completion.length > 20) {
-              const key = `${prompt}|${completion}`;
-              if (!uniqueDataForFineTuning.has(key)) {
-                uniqueDataForFineTuning.set(key, { prompt, completion });
-              }
+            const key = `${prompt}|${completion}`;
+            if (!uniqueDataForFineTuning.has(key)) {
+              uniqueDataForFineTuning.set(key, { prompt, completion });
             }
           }
         }
 
         if (sentenceIndex < sentences.length - 1) {
           const nextSentence = sentences[sentenceIndex + 1];
-          const key = `${sentence}|${nextSentence}`;
+          const key = `${sentence}|${nextSentence.split(' ').slice(0, COMPLETION_LENGTH).join(' ')}`;
           if (
-            sentence.length > 20 &&
-            nextSentence.length > 20 &&
+            sentence.length > MAX_PROMPT_LENGTH &&
             !uniqueDataForFineTuning.has(key)
           ) {
             uniqueDataForFineTuning.set(key, {
               prompt: sentence,
-              completion: nextSentence,
+              completion: nextSentence
+                .split(' ')
+                .slice(0, COMPLETION_LENGTH)
+                .join(' '),
             });
           }
         }
@@ -80,6 +88,7 @@ async function extractDataForFineTuning() {
   fs.writeFileSync(
     filePath,
     Array.from(uniqueDataForFineTuning.values())
+      .sort((a, b) => a.prompt.localeCompare(b.prompt))
       .map((line) => JSON.stringify(line))
       .join('\n')
   );

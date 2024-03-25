@@ -9,14 +9,14 @@ router.post('/', async function (req, res) {
 
     const completion = await openai.completions.create({
       model: process.env.OPENAI_MODEL,
-      prompt: req.body.prompt,
+      prompt: req.body.prompt.trim(),
       max_tokens: req.body.maxTokens || 16,
       temperature: req.body.temperature || 0,
     });
 
     res.json(completion);
   } catch (error) {
-    console.error(error.toJSON());
+    console.error(error);
     res.status(500).json({ name: error.name, message: error.message });
   }
 });
