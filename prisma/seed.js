@@ -1,7 +1,5 @@
-import { PrismaClient } from '@prisma/client';
 import { readFileSync } from 'fs';
-
-const prisma = new PrismaClient();
+import prisma from '../prisma-client';
 
 async function main() {
   await prisma.section.deleteMany();

@@ -2,10 +2,8 @@ import cookieParser from 'cookie-parser';
 import 'dotenv/config';
 import express from 'express';
 import logger from 'morgan';
-
-import completionsRouter from './routes/completions';
-import indexRouter from './routes/index';
-import lessonsRouter from './routes/lessons';
+import { errorHandler } from './middleware';
+import { completionsRouter, lessonsRouter } from './routes';
 
 const app = express();
 
@@ -14,8 +12,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 
-app.use('/', indexRouter);
 app.use('/completions', completionsRouter);
 app.use('/lessons', lessonsRouter);
+
+app.use(errorHandler);
 
 export default app;
