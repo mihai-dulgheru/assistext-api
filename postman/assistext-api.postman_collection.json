@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "5cde4d64-6d3b-49a1-9868-c2b809fc0993",
+		"_postman_id": "80d106cc-82ca-4cfb-abc4-2304c10d8449",
 		"name": "assistext-api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "18120273"
@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"prompt\": \"Introducere în curs\",\r\n    \"maxTokens\": 16,\r\n    \"temperature\": 0\r\n}",
+							"raw": "{\r\n    \"prompt\": \"În era digitală, copywriting-ul joacă un\",\r\n    \"maxTokens\": 8,\r\n    \"temperature\": 0\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
