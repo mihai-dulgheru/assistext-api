@@ -2,9 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import prisma from '../prisma-client';
 
-const MIN_PROMPT_LENGTH = 3;
+const MIN_PROMPT_LENGTH = 5;
 const MAX_PROMPT_LENGTH = 20;
-const COMPLETION_LENGTH = 3;
+const COMPLETION_LENGTH = 5;
 
 function splitIntoSentences(text) {
   const sentences = text.match(/[\s]*[^.!?]+[.!?]+[\s]*/g) || [];
